@@ -2,12 +2,21 @@ from web3 import Web3
 from eth_account import Account
 from openpyxl import Workbook, load_workbook
 import datetime
+import os
+
 # 连接到以太坊节点
 w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/e658b23b88e34ffead308d481ea1b1cb'))
 
+# 获取程序根目录
+root_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Excel 文件路径
+eth_data_path = os.path.join(root_dir, 'eth_data.xlsx')
+positive_balance_data_path = os.path.join(root_dir, 'positive_balance_data.xlsx')
+
 # 加载现有的Excel文件或创建新文件
 try:
-    workbook = load_workbook('eth_data.xlsx')
+    workbook = load_workbook(eth_data_path)
     sheet = workbook.active
 except FileNotFoundError:
     workbook = Workbook()
@@ -45,13 +54,14 @@ for i in range(80):
             positive_balance_sheet.append([private_key, address, eth_balance])
 
     # 保存Excel文件
-    workbook.save('eth_data.xlsx')
-    positive_balance_workbook.save('positive_balance_data.xlsx')
+    workbook.save(eth_data_path)
+    positive_balance_workbook.save(positive_balance_data_path)
 
 print("DONE")
-# Get the current time
+
+# 获取当前时间
 current_time = datetime.datetime.now()
 
-# Format the current time
+# 格式化当前时间
 formatted_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
-print(current_time)
+print(formatted_time)
